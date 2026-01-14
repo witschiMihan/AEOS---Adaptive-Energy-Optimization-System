@@ -410,5 +410,7 @@ All features implemented, tested, and deployed.
 
 **Last Updated**: December 31, 2025  
 **Maintained By**: RigVisionX Technology  
-**Contact**: Email: mihanwitschi@gmail.com
-             Contact: +60 1196491842
+**Email**: mihanwitschi@gmail.com
+**Mobile**: +60 1169491842
+**LinkedIn**: RigVisionX Technology | https://www.linkedin.com/in/rigvisionx-technology-7085943a4/
+**2n LinkedIn**: Witschi Mihan | https://www.linkedin.com/in/witschi-mihan-14a347312/
