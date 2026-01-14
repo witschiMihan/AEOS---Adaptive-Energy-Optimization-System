@@ -1,4 +1,4 @@
-# Smart Energy Consumption & Bit Correction System (AEOS)
+# Adaptive Energy Optimization System (AEOS)
 ## Enhanced with Adaptive ML-Based Self-Learning Features
 
 ### 🎯 Quick Start
