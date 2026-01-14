@@ -409,5 +409,5 @@ All features implemented, tested, and deployed.
 ---
 
 **Last Updated**: December 31, 2025  
-**Maintained By**: Development Team  
-**Contact**: [Support Information]
+**Maintained By**: RigVisionX Technology  
+**Contact**: (mihanwitschi@gmail.com)
