@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEOS - Smart Energy System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            display: flex;
+            gap: 10px;
+            padding: 15px 30px;
+            border-bottom: 2px solid #667eea;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid #667eea;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-box .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ AEOS</h1>
+            <p>Smart Energy Consumption & Bit Correction System</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="showSection('upload')">📤 Upload Data</button>
+            <button class="nav-btn" onclick="showSection('analysis')">📈 Analysis</button>
+            <button class="nav-btn" onclick="showSection('machines')">⚙️ Machines</button>
+            <button class="nav-btn" onclick="showSection('help')">❓ Help</button>
+        </nav>
+
+        <div class="content">
+            <div id="message" class="message"></div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-box">
+                        <h3>Total Records</h3>
+                        <div class="value" id="totalRecords">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Average Consumption</h3>
+                        <div class="value" id="avgConsumption">0 kWh</div>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Max Consumption</h3>
+                        <div class="value" id="maxConsumption">0 kWh</div>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Total Consumption</h3>
+                        <div class="value" id="totalConsumption">0 kWh</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Energy Consumption Chart</h2>
+                    <div class="chart-container">
+                        <canvas id="consumptionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Recent Records</h2>
+                    <div id="recentTable"></div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn-primary" onclick="refreshDashboard()">🔄 Refresh</button>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div id="upload" class="section">
+                <div class="card">
+                    <h2>Upload Energy Data (CSV)</h2>
+                    <p style="margin-bottom: 15px; color: #666;">
+                        CSV Format: RecordID, MachineID, Consumption(kWh)
+                    </p>
+                    <div class="form-group">
+                        <label for="fileInput">Select CSV File:</label>
+                        <input type="file" id="fileInput" accept=".csv" />
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="uploadFile()">📤 Upload File</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Add Record Manually</h2>
+                    <div class="form-group">
+                        <label for="recordId">Record ID:</label>
+                        <input type="text" id="recordId" placeholder="e.g., R001" />
+                    </div>
+                    <div class="form-group">
+                        <label for="machineId">Machine ID:</label>
+                        <input type="text" id="machineId" placeholder="e.g., M-001" />
+                    </div>
+                    <div class="form-group">
+                        <label for="consumption">Consumption (kWh):</label>
+                        <input type="number" id="consumption" placeholder="45.5" step="0.1" />
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="addRecord()">➕ Add Record</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div id="analysis" class="section">
+                <div class="card">
+                    <h2>Energy Statistics</h2>
+                    <button class="btn-primary" onclick="loadStatistics()">📊 Load Statistics</button>
+                    <div id="statisticsTable"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Machine Analysis</h2>
+                    <button class="btn-primary" onclick="loadMachineStats()">⚙️ Load Machine Stats</button>
+                    <div id="machineStatsTable"></div>
+                </div>
+            </div>
+
+            <!-- Machines Section -->
+            <div id="machines" class="section">
+                <div class="card">
+                    <h2>Register New Machine</h2>
+                    <div class="form-group">
+                        <label for="newMachineId">Machine ID:</label>
+                        <input type="text" id="newMachineId" placeholder="M-001" />
+                    </div>
+                    <div class="form-group">
+                        <label for="machineName">Machine Name:</label>
+                        <input type="text" id="machineName" placeholder="Pump A" />
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" placeholder="Warehouse 1" />
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" onclick="addMachine()">➕ Register Machine</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Registered Machines</h2>
+                    <button class="btn-primary" onclick="loadMachines()">🔄 Refresh List</button>
+                    <div id="machinesList"></div>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div id="help" class="section">
+                <div class="card">
+                    <h2>📖 Getting Started</h2>
+                    <p><strong>Step 1: Upload Data</strong></p>
+                    <p>Go to "Upload Data" tab and upload your CSV file containing energy consumption records.</p>
+                    <p style="margin-top: 15px;"><strong>Step 2: View Dashboard</strong></p>
+                    <p>The Dashboard shows real-time statistics and charts of your energy data.</p>
+                    <p style="margin-top: 15px;"><strong>Step 3: Analyze</strong></p>
+                    <p>Use the Analysis section to view detailed statistics and machine-specific data.</p>
+                    <p style="margin-top: 15px;"><strong>CSV Format Example:</strong></p>
+                    <pre style="background: #f0f0f0; padding: 15px; margin-top: 10px; border-radius: 5px;">
+RecordID,MachineID,Consumption
+R1,M-001,45.5
+R2,M-001,52.3
+R3,M-002,38.7</pre>
+                </div>
+
+                <div class="card">
+                    <h2>💡 Tips</h2>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Use consistent Machine IDs across your data</li>
+                        <li>Consumption values should be in kWh</li>
+                        <li>The system automatically calculates statistics</li>
+                        <li>Charts update after uploading new data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>AEOS v2.0 - Smart Energy System | © 2026 | No installation required - Web-based energy monitoring</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api/energy';
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showMessage(message, type = 'success') {
+            const msgEl = document.getElementById('message');
+            msgEl.textContent = message;
+            msgEl.className = `message ${type}`;
+            setTimeout(() => msgEl.className = 'message', 5000);
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files.length) {
+                showMessage('Please select a file', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch(`${API_BASE}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                showMessage(`✅ ${data.message} - ${data.recordsCount} records loaded`, 'success');
+                fileInput.value = '';
+                refreshDashboard();
+            } catch (error) {
+                showMessage('❌ Error uploading file: ' + error.message, 'error');
+            }
+        }
+
+        async function addRecord() {
+            const recordId = document.getElementById('recordId').value;
+            const machineId = document.getElementById('machineId').value;
+            const consumption = document.getElementById('consumption').value;
+
+            if (!recordId || !machineId || !consumption) {
+                showMessage('Please fill all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/record`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recordId, machineId, consumption: parseFloat(consumption),
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                const data = await response.json();
+                showMessage('✅ Record added successfully', 'success');
+                document.getElementById('recordId').value = '';
+                document.getElementById('machineId').value = '';
+                document.getElementById('consumption').value = '';
+                refreshDashboard();
+            } catch (error) {
+                showMessage('❌ Error adding record', 'error');
+            }
+        }
+
+        async function refreshDashboard() {
+            try {
+                const recordsRes = await fetch(`${API_BASE}/records`);
+                const recordsData = await recordsRes.json();
+                
+                const statsRes = await fetch(`${API_BASE}/statistics`);
+                const statsData = await statsRes.json();
+
+                document.getElementById('totalRecords').textContent = recordsData.count || 0;
+                document.getElementById('avgConsumption').textContent = (statsData.average || 0) + ' kWh';
+                document.getElementById('maxConsumption').textContent = (statsData.max || 0) + ' kWh';
+                document.getElementById('totalConsumption').textContent = (statsData.total || 0) + ' kWh';
+
+                displayChart(recordsData.data || []);
+                displayRecentRecords(recordsData.data || []);
+            } catch (error) {
+                showMessage('❌ Error loading dashboard', 'error');
+            }
+        }
+
+        function displayChart(records) {
+            const ctx = document.getElementById('consumptionChart');
+            if (!ctx) return;
+
+            const labels = records.slice(-20).map((r, i) => `Record ${i + 1}`);
+            const data = records.slice(-20).map(r => r.consumption);
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Energy Consumption (kWh)',
+                        data: data,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Consumption (kWh)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayRecentRecords(records) {
+            const tableDiv = document.getElementById('recentTable');
+            if (records.length === 0) {
+                tableDiv.innerHTML = '<p style="color: #999;">No records available</p>';
+                return;
+            }
+
+            let html = '<table>';
+            html += '<thead><tr><th>Record ID</th><th>Machine ID</th><th>Consumption (kWh)</th><th>Timestamp</th></tr></thead>';
+            html += '<tbody>';
+            records.slice(-10).reverse().forEach(r => {
+                html += `<tr><td>${r.recordId}</td><td>${r.machineId}</td><td>${r.consumption}</td><td>${new Date(r.timestamp).toLocaleString()}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            tableDiv.innerHTML = html;
+        }
+
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_BASE}/statistics`);
+                const data = await response.json();
+
+                let html = '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
+                Object.entries(data).forEach(([key, value]) => {
+                    html += `<tr><td style="text-transform: capitalize;">${key.replace(/([A-Z])/g, ' $1')}</td><td><strong>${value}</strong></td></tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('statisticsTable').innerHTML = html;
+            } catch (error) {
+                showMessage('❌ Error loading statistics', 'error');
+            }
+        }
+
+        async function loadMachineStats() {
+            try {
+                const response = await fetch(`${API_BASE}/statistics/byMachine`);
+                const data = await response.json();
+
+                let html = '<table><thead><tr><th>Machine ID</th><th>Average (kWh)</th><th>Total (kWh)</th><th>Records</th></tr></thead><tbody>';
+                Object.entries(data).forEach(([machineId, stats]) => {
+                    html += `<tr><td>${machineId}</td><td>${stats.average}</td><td>${stats.total}</td><td>${stats.count}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('machineStatsTable').innerHTML = html;
+            } catch (error) {
+                showMessage('❌ Error loading machine stats', 'error');
+            }
+        }
+
+        async function addMachine() {
+            const machineId = document.getElementById('newMachineId').value;
+            const machineName = document.getElementById('machineName').value;
+            const location = document.getElementById('location').value;
+
+            if (!machineId || !machineName || !location) {
+                showMessage('Please fill all fields', 'error');
+                return;
+            }
+
+            try {
+                await fetch(`${API_BASE}/machine`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ machineId, machineName, location })
+                });
+                showMessage('✅ Machine registered successfully', 'success');
+                document.getElementById('newMachineId').value = '';
+                document.getElementById('machineName').value = '';
+                document.getElementById('location').value = '';
+                loadMachines();
+            } catch (error) {
+                showMessage('❌ Error registering machine', 'error');
+            }
+        }
+
+        async function loadMachines() {
+            try {
+                const response = await fetch(`${API_BASE}/machines`);
+                const data = await response.json();
+
+                if (data.count === 0) {
+                    document.getElementById('machinesList').innerHTML = '<p style="color: #999;">No machines registered</p>';
+                    return;
+                }
+
+                let html = '<table><thead><tr><th>Machine ID</th><th>Name</th><th>Location</th></tr></thead><tbody>';
+                data.data.forEach(m => {
+                    html += `<tr><td>${m.machineId}</td><td>${m.machineName}</td><td>${m.location}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('machinesList').innerHTML = html;
+            } catch (error) {
+                showMessage('❌ Error loading machines', 'error');
+            }
+        }
+
+        // Load dashboard on page load
+        window.onload = () => {
+            refreshDashboard();
+            loadMachines();
+        };
+    </script>
+</body>
+</html>

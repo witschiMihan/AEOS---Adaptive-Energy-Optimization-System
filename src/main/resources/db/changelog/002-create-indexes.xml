@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002-create-performance-indexes" author="aeos">
+        <description>Create indexes for better query performance</description>
+        
+        <!-- Energy Records Indexes -->
+        <createIndex indexName="idx_energy_records_machine_id" tableName="energy_records">
+            <column name="machine_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_energy_records_timestamp" tableName="energy_records">
+            <column name="timestamp"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_energy_records_created_at" tableName="energy_records">
+            <column name="created_at"/>
+        </createIndex>
+        
+        <!-- Anomaly Reports Indexes -->
+        <createIndex indexName="idx_anomaly_reports_record_id" tableName="anomaly_reports">
+            <column name="record_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_anomaly_reports_anomaly_type" tableName="anomaly_reports">
+            <column name="anomaly_type"/>
+        </createIndex>
+        
+        <!-- Predictions Indexes -->
+        <createIndex indexName="idx_predictions_model_id" tableName="predictions">
+            <column name="model_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_predictions_record_id" tableName="predictions">
+            <column name="record_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_predictions_prediction_date" tableName="predictions">
+            <column name="prediction_date"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

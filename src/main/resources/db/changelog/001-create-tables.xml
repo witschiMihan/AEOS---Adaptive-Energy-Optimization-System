@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-create-energy-records-table" author="aeos">
+        <description>Create energy records table</description>
+        <createTable tableName="energy_records">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="record_id" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="machine_id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="consumption" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timestamp" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-machines-table" author="aeos">
+        <description>Create machines table</description>
+        <createTable tableName="machines">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="machine_id" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(20)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-anomaly-reports-table" author="aeos">
+        <description>Create anomaly detection reports table</description>
+        <createTable tableName="anomaly_reports">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="record_id" type="VARCHAR(50)">
+                <constraints nullable="false" foreignKeyName="fk_anomaly_records" 
+                    references="energy_records(record_id)"/>
+            </column>
+            <column name="anomaly_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="anomaly_score" type="DECIMAL(5,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_anomaly" type="BIT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="created_at" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-ml-models-table" author="aeos">
+        <description>Create ML models metadata table</description>
+        <createTable tableName="ml_models">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="model_name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="model_type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="accuracy" type="DECIMAL(5,2)"/>
+            <column name="training_date" type="DATETIME"/>
+            <column name="last_updated" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="model_path" type="VARCHAR(500)"/>
+            <column name="status" type="VARCHAR(20)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-predictions-table" author="aeos">
+        <description>Create predictions table</description>
+        <createTable tableName="predictions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="model_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_prediction_models" 
+                    references="ml_models(id)"/>
+            </column>
+            <column name="record_id" type="VARCHAR(50)">
+                <constraints nullable="false" foreignKeyName="fk_prediction_records" 
+                    references="energy_records(record_id)"/>
+            </column>
+            <column name="predicted_value" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="actual_value" type="DECIMAL(10,2)"/>
+            <column name="confidence" type="DECIMAL(5,2)"/>
+            <column name="prediction_date" type="DATETIME" defaultValueDate="GETDATE()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
