@@ -1,0 +1,8 @@
+{
+  "modelName": "EnsembleML",
+  "modelType": "Ensemble",
+  "timestamp": 1768380997315,
+  "metrics": {
+    "ensembleAccuracy": 0.950000
+  }
+}
