@@ -12,9 +12,9 @@
 ```
 
 📖 **Quick Links:**
-- 🖥️ [Desktop App Setup](AEOS_DESKTOP_APP_COMPLETE.md)
-- 🌐 [Web Version Setup](WEB_SETUP_GUIDE.md)
-- ⚡ [Quick Start Guide](QUICK_START_DESKTOP_APP.txt)
+![Desktop App](https://img.shields.io/badge/Desktop-Java%20Swing-blue?style=for-the-badge)
+![Web App](https://img.shields.io/badge/Web-Spring%20Boot-brightgreen?style=for-the-badge&logo=springboot&logoColor=white)
+![Architecture](https://img.shields.io/badge/Architecture-Layered-important?style=for-the-badge)
 
 ---
 
@@ -350,10 +350,12 @@ Smart Energy Consumption & Bit Correction System/
 
 ### Dependencies
 
-- **Java**: JDK 21
-- **Build**: Maven 3.8+
-- **ML**: Weka 3.8.6
-- **GUI**: Java Swing (built-in)
+![Java](https://img.shields.io/badge/Java-21%2B-orange?style=for-the-badge&logo=openjdk&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-3.8%2B-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Adaptive-blueviolet?style=for-the-badge&logo=tensorflow&logoColor=white)
+![Energy Systems](https://img.shields.io/badge/Energy-Optimization-green?style=for-the-badge&logo=powerbi&logoColor=white)
+![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)
+
 
 ### Compilation Status
 
